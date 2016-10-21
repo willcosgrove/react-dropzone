@@ -195,6 +195,7 @@ class Dropzone extends React.Component {
       className,
       rejectStyle,
       style,
+      captureDrop,
       ...props // eslint-disable-line prefer-const
     } = rest;
 
@@ -265,6 +266,8 @@ class Dropzone extends React.Component {
     const divProps = { ...props };
     customProps.forEach(prop => delete divProps[prop]);
 
+    const dropProp = captureDrop ? {onDropCapture: this.onDrop} : {onDrop: this.onDrop}
+
     return (
       <div
         className={className}
@@ -275,7 +278,7 @@ class Dropzone extends React.Component {
         onDragEnter={this.onDragEnter}
         onDragOver={this.onDragOver}
         onDragLeave={this.onDragLeave}
-        onDrop={this.onDrop}
+        {...dropProp}
       >
         {this.props.children}
         <input
@@ -288,6 +291,7 @@ class Dropzone extends React.Component {
 }
 
 Dropzone.defaultProps = {
+  captureDrop: false,
   disablePreview: false,
   disableClick: false,
   multiple: true,
@@ -317,6 +321,7 @@ Dropzone.propTypes = {
   disablePreview: React.PropTypes.bool, // Enable/disable preview generation
   disableClick: React.PropTypes.bool, // Disallow clicking on the dropzone container to open file dialog
   onFileDialogCancel: React.PropTypes.func, // Provide a callback on clicking the cancel button of the file dialog
+  captureDrop: React.PropTypes.bool,
 
   inputProps: React.PropTypes.object, // Pass additional attributes to the <input type="file"/> tag
   multiple: React.PropTypes.bool, // Allow dropping multiple files
